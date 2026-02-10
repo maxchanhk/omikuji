@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>Ong Kaw Kaw求籤</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body {
+  background: radial-gradient(circle, #fff7ed, #fde68a);
+  min-height: 100vh;
+  font-family: system-ui;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card {
+  width: 360px;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 25px 45px rgba(0,0,0,.25);
+}
+h1 { margin-bottom: .5rem; }
+
+.tube {
+  margin: 1rem auto;
+  width: 60px;
+  height: 120px;
+  border-radius: 30px;
+  background: linear-gradient(#b91c1c, #7f1d1d);
+}
+.shake {
+  animation: shake 1.2s;
+}
+@keyframes shake {
+  0% { transform: rotate(0); }
+  25% { transform: rotate(6deg); }
+  50% { transform: rotate(-6deg); }
+  75% { transform: rotate(4deg); }
+  100% { transform: rotate(0); }
+}
+
+button {
+  margin-top: 1rem;
+  padding: .7rem 1.4rem;
+  border-radius: 999px;
+  border: none;
+  background: #b91c1c;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.level {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-top: .6rem;
+}
+.poem {
+  white-space: pre-line;
+  margin: 1rem 0;
+}
+.section {
+  font-size: .85rem;
+  text-align: left;
+  margin-top: .6rem;
+}
+</style>
+</head>
+
+<body>
+<div class="card">
+  <h1>大眾Ong Kaw Kaw,<br>齊來求支籤🙏</h1>
+  <div class="tube" id="tube"></div>
+
+  <div id="result">心誠則靈</div>
+
+  <button id="draw">求一支籤</button>
+
+
+<!-- 註：這個網頁由 Vibe Coding 製作示範 -->
+  <div style="text-align:center; margin-top:2rem; font-size:0.9rem; color:#888;">
+    🌟 本網站OngKawKaw.com 使用Vibe Coding 製作  🌟<br>籤文根據黃大仙靈籤製成<br>
+  </div>
+
+</div>
+
+<script src="fortunes.js"></script>
+<script>
+const btn = document.getElementById("draw");
+const tube = document.getElementById("tube");
+const result = document.getElementById("result");
+
+btn.onclick = () => {
+  tube.classList.add("shake");
+  result.innerHTML = "正在搖籤…";
+
+  setTimeout(() => {
+    tube.classList.remove("shake");
+    const f = fortunes[Math.floor(Math.random() * fortunes.length)];
+    result.innerHTML = `
+      <div>第 ${f.id} 籤｜${f.title}</div>
+      <div class="level">${f.level}</div>
+      <div class="poem">${f.poem}</div>
+      <div class="section">【整體】${f.explain.overall}</div>
+      <div class="section">【事業】${f.explain.career}</div>
+      <div class="section">【感情】${f.explain.love}</div>
+      <div class="section">【財運】${f.explain.wealth}</div>
+    `;
+  }, 1200);
+};
+
+    // 🌟 PWA 安裝提示
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e)=>{
+      e.preventDefault();
+      deferredPrompt = e;
+      const installBtn = document.createElement('button');
+      installBtn.textContent = "📱 安裝到桌面";
+      installBtn.style.margin = "0.5rem";
+      document.querySelector('.container').prepend(installBtn);
+      installBtn.addEventListener('click', async ()=>{
+        deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice;
+        if(choice.outcome === 'accepted'){
+          alert('已安裝到桌面！');
+        }
+        installBtn.remove();
+        deferredPrompt = null;
+      });
+    });
+
+</script>
+</body>
+</html>
